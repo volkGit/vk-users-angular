@@ -1,0 +1,65 @@
+<div class="row mt-3">
+    <div class="col-sm-3">
+        <ul class="nav flex-column">
+          <li class="nav-item" [class]="{'active' : tab === 0}" (click)="tab = 0">
+            <a class="nav-link" href="#">Исходный список</a>
+          </li>
+          <li class="nav-item" [class]="{'active' : tab === 1}" (click)="tab = 1">
+            <a class="nav-link" href="#">Друзья</a>
+          </li>
+        </ul>
+    </div>
+    <div class="col-sm-9">
+        <div *ngIf="tab === 0">
+            <div class="card mb-3" *ngFor="let user of users">
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-sm-2">
+                            <span class="avatar-panel-small"><img [src]="user.photo"></span>
+                        </div>
+                        <div class="col-sm-10">
+                            <h5>{{ user.name }}</h5>
+                            <span class="badge bg-danger float-end mt-30" (click)="showDelete(user)">X</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="tab === 1">
+            <div class="card mb-3" *ngFor="let friend of friends">
+              <h5 class="card-header">
+                {{ friend.name }}
+              </h5>
+              <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span class="avatar-panel mb-3"><img [src]="friend.photo"></span>
+                    </div>
+                    <div class="col-sm-9">
+                        <p>Пол: <span>{{ friend.male }}</span></p>
+                        <p>Возраст: <span>{{ friend.age }}</span></p>
+                        <p>Количество друзей: <span>{{ friend.counters.friends }}</span></p>
+                        <p>Количество фотографий: <span>{{ friend.counters.photos }}</span></p>
+                        <a
+                            *ngIf="!friend.isBanned && !friend.isDeleted"
+                            routerLink="user/{{ friend.id}}"
+                            class="btn btn-primary"
+                        >
+                            Перейти на страницу
+                        </a>
+                        <div *ngIf="friend.isBanned" class="alert alert-danger">
+                            <span>Блокированный аккаунт</span>
+                        </div>
+                        <div *ngIf="friend.isDeleted" class="alert alert-danger">
+                            <span>Аккаунт удалён</span>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-center" *ngIf="isLoading">
+                <app-loader></app-loader>
+            </div>
+        </div>
+    </div>
+</div>
